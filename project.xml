@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<meta title="Test1" package="com.example.test1" version="1.0.0" company="Company Name" />
+	<app main="Main" path="Export" file="Test1" />
+	
+	<source path="Source" />
+	
+	<haxelib name="openfl" />
+	
+	<assets path="Assets" rename="assets" exclude="openfl.svg" include="*" />
+	<icon path="Assets/openfl.svg" />
+	
+</project>
