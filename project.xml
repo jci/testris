@@ -3,7 +3,7 @@
 	
 	<meta title="Test1" package="com.example.test1" version="1.0.0" company="Company Name" />
 	<app main="Main" path="Export" file="Test1" />
-	
+	<window width="480" height="300" orientation="landscape" fullscreen="true" fps="60" background="0x000000" />
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
