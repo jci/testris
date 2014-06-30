@@ -3,13 +3,17 @@ package ;
 class Tetromino
 {
 
-	public static inline var fig_I:Int = 0; 
-	public static inline var fig_O:Int = 1;
-	public static inline var fig_T:Int = 2;
-	public static inline var fig_S:Int = 3;
-	public static inline var fig_Z:Int = 4;
-	public static inline var fig_J:Int = 5;
-	public static inline var fig_L:Int = 6;
+	enum tetro
+	{
+		fig_I;
+		fig_O;
+		fig_T;
+		fig_S;
+		fig_Z;
+		fig_J;
+		fig_L;
+	}
+
 
 	public var cells:Array<Array<Int>>;
 	public var x:Int;

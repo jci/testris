@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<meta title="Test1" package="com.jcigaems.testris" version="0.0.1" company="jCi gaems" />
-	<app main="Main" path="Export" file="testris" />
-	<window width="480" height="300" orientation="landscape" fullscreen="false" fps="60" background="0x000000" />
+	<meta title="Testris" package="com.jcigaems.testris" version="0.0.1" company="jCi gaems" />
+	<app main="Main" path="Export" file="testris" title="Testris" />
+	<set name="ANDROID_INSTALL_LOCATION" value="auto" />
+
+	<window width="480" height="300" orientation="landscape" fullscreen="false" fps="30" background="0x000000" />
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
