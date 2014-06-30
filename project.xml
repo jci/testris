@@ -5,12 +5,12 @@
 	<app main="Main" path="Export" file="testris" title="Testris" />
 	<set name="ANDROID_INSTALL_LOCATION" value="auto" />
 
-	<window width="480" height="300" orientation="landscape" fullscreen="false" fps="30" background="0x000000" />
+	<window width="480" height="320" orientation="landscape"  fullscreen="false" fps="30" background="0x000000"  />
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
 	
-	<assets path="Assets" rename="assets" exclude="openfl.svg" include="*" />
+	<assets path="Assets" rename="assets" exclude="openfl.svg" include="*.*" />
 	<icon path="Assets/openfl.svg" />
 	
 </project>

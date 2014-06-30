@@ -6,6 +6,7 @@ import openfl.media.SoundTransform;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.Lib;
+import flash.Lib.current;
 import openfl.events.KeyboardEvent;
 import openfl.events.Event;
 import openfl.events.EventDispatcher;
@@ -22,6 +23,9 @@ import openfl.events.AccelerometerEvent;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Tilesheet;
+import openfl.display.StageScaleMode;
+import openfl.display.StageAlign;
+import openfl.display.StageDisplayState;
 
 enum GameState 
 {
@@ -41,7 +45,7 @@ class Game extends Sprite
 	private var state : GameState = gameInit;
 	private var gamestage = Lib.current.stage;
 	private var gamespeed :Int;
-	private var platform :Sprite;
+	private var drawable :Sprite;
 	private var titleText : TextField;
 	private var titleFormat : TextFormat;
 	private var gamecounter : Int;
@@ -55,14 +59,19 @@ class Game extends Sprite
 	private var tileblock : Tilesheet;
 
 
-	private var playbutton : Bitmap;
+
+	private var playbutton : Sprite = new Sprite();
+
+	private var direction : Bool = false;
 
 	private static inline var EMPTY_CELL=0;
+
+	private static inline var scrollspeed=0.2;
 
 
 	// only 6 figures
 
-	public function new(_platform:Dynamic)
+	public function new(playground:Dynamic)
 	{
 		super();
 		addListeners();
@@ -70,28 +79,33 @@ class Game extends Sprite
 		gamecounter = 0;
 		gamespeed = 200;
 		gameTetro = false;
+		drawable = playground;
 
+		
+	}
 
-
+	public function init()
+	{
+		trace("init");
+	    
 	}
 
 	public function initgame(event:Event)
 	{
-		//addChild(new Bitmap(Assets.getBitmapData("assets/block.png",false)));
-		// adding the rest of the resources
-	
-		playblock = new BitmapData(stage.stageWidth,stage.stageHeight,true,0x5a5a5a);
-		addChild(new Bitmap(playblock));
+		current.stage.align = StageAlign.TOP_LEFT;
+		current.stage.scaleMode = StageScaleMode.NO_SCALE;
 
-		textblock = new BitmapData(stage.stageWidth,stage.stageHeight,true,0xfafafa);
-		addChild(new Bitmap(textblock));
+		// add all the drawables
 
-		tileblock = new Tilesheet(Assets.getBitmapData("assets/block.png",false));	
+		playbutton.addChild(new Bitmap(Assets.getBitmapData("assets/play.png")));
+		playbutton.x = stage.stageWidth/2 - playbutton.width/2;
+		playbutton.y = stage.stageHeight/2 - playbutton.height/2; 
+		playbutton.visible = true;
+		playbutton.addEventListener(MouseEvent.MOUSE_DOWN,onClickPlayButton);
 
-		playbutton = new Bitmap(Assets.getBitmapData("assets/play.png"));
-		playbutton.x = stage.stageWidth/2 - playbutton.get_width()/2;
-		playbutton.y = stage.stageHeight/2 - playbutton.get_height()/2;
-		addChild(playbutton);
+		drawable.addChild(playbutton);
+
+		
 		start();
 	}
 
@@ -129,7 +143,7 @@ class Game extends Sprite
 
 		}
 
-		if (state == gameIntro)
+		if (state == gameIntro || state == gameInit)
 		{
 			playbutton.visible = true;
 
@@ -174,16 +188,6 @@ class Game extends Sprite
 
 		if (state == gameInit || state == gameIntro)
 		{	
-			var xpos = event.stageX;
-			var ypos = event.stageY;
-
-			if (playbutton.visible)
-			{
-				if ( xpos > stage.stageWidth/2 - playbutton.get_width()/2 && xpos < stage.stageWidth/2 + playbutton.get_width()/2 && ypos > stage.stageHeight/2 - playbutton.get_height()/2 && ypos < stage.stageHeight/2 + playbutton.get_height()/2)
-				{
-					startgame();
-				}
-			}
 		}
 
 	}
@@ -194,6 +198,11 @@ class Game extends Sprite
 #if debug
 		trace("onKeyPressed");
 #end
+		if (event.keyCode == Keyboard.Y)
+		{
+			state = gameInit;
+			start();
+		}
 
 		if ( state == gamePlaying)
 		{
@@ -241,6 +250,7 @@ class Game extends Sprite
 					}
 			}
 		}
+
 
 	}
 
@@ -311,6 +321,16 @@ class Game extends Sprite
 			}
 		}
 
+	}
+
+	private function onClickPlayButton(event:MouseEvent)
+	{
+		// someone clicked me
+		trace("clicked on button?");
+		if (state == gameInit && playbutton.visible)
+		{
+			startgame();
+		}
 	}
 
 }
