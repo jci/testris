@@ -177,9 +177,12 @@ class Game extends Sprite
 			var xpos = event.stageX;
 			var ypos = event.stageY;
 
-			if ( xpos > stage.stageWidth/2 - 50 && xpos < stage.stageWidth/2 + 50 && ypos > stage.stageHeight/2 - 50 && ypos < stage.stageHeight/2 + 50)
+			if (playbutton.visible)
 			{
-				startgame();
+				if ( xpos > stage.stageWidth/2 - playbutton.get_width()/2 && xpos < stage.stageWidth/2 + playbutton.get_width()/2 && ypos > stage.stageHeight/2 - playbutton.get_height()/2 && ypos < stage.stageHeight/2 + playbutton.get_height()/2)
+				{
+					startgame();
+				}
 			}
 		}
 
