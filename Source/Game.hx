@@ -11,6 +11,7 @@ import openfl.events.Event;
 import openfl.events.EventDispatcher;
 import openfl.events.EventPhase;
 import SoundManager;
+import Tetromino;
 import openfl.ui.Keyboard;
 
 enum GameState 

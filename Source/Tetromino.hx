@@ -1,10 +1,9 @@
-package ; 
+package ;
 
-class Tetromino
+import Game;
+
+enum Tetro
 {
-
-	enum tetro
-	{
 		fig_I;
 		fig_O;
 		fig_T;
@@ -12,10 +11,21 @@ class Tetromino
 		fig_Z;
 		fig_J;
 		fig_L;
-	}
+}
+
+enum Cell
+{
+	EMPTY_CELL;
+	FULL_CELL;
+}
 
 
-	public var cells:Array<Array<Int>>;
+
+class Tetromino
+{
+
+
+	public var cells:Array<Array<Cell>>;
 	public var x:Int;
 	public var y:Int;
 	public var size:Int;
@@ -25,7 +35,20 @@ class Tetromino
 
 	public function new()
 	{
-		cells = Game.initMatrix(4,4,Game.EMPTY_CELL);
+		cells = initMatrix(4,4,EMPTY_CELL);
+	}
+
+	private  function initMatrix(rows:Int, cols:Int, value:Cell)
+	{
+		var t1 : Int=0;
+		var t2 : Int=0;
+		var t3 =  new Array<Array<Cell>>();
+
+		for (t1 in 0...rows)
+			for (t2 in 0...cols)
+				t3[t1][t2] = value;
+		return t3;
+
 	}
 
 
