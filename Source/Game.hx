@@ -19,7 +19,9 @@ import openfl.display.Stage;
 import openfl.events.MouseEvent;
 import openfl.events.TouchEvent;
 import openfl.events.AccelerometerEvent;
-
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.Tilesheet;
 
 enum GameState 
 {
@@ -45,6 +47,17 @@ class Game extends Sprite
 	private var gamecounter : Int;
 
 	private var gamefield : Array<Array<Cell>> = new Array();
+	private var gameTetro : Bool;
+
+	private var playfield : BitmapData;
+	private var playblock : BitmapData;
+	private var textblock : BitmapData;
+	private var tileblock : Tilesheet;
+
+
+	private var playbutton : Bitmap;
+
+	private static inline var EMPTY_CELL=0;
 
 
 	// only 6 figures
@@ -56,16 +69,29 @@ class Game extends Sprite
 
 		gamecounter = 0;
 		gamespeed = 200;
+		gameTetro = false;
 
 
-		
-		cleangamefield();
 
 	}
 
 	public function initgame(event:Event)
 	{
-		Lib.trace("Here I am, on init");
+		//addChild(new Bitmap(Assets.getBitmapData("assets/block.png",false)));
+		// adding the rest of the resources
+	
+		playblock = new BitmapData(stage.stageWidth,stage.stageHeight,true,0x5a5a5a);
+		addChild(new Bitmap(playblock));
+
+		textblock = new BitmapData(stage.stageWidth,stage.stageHeight,true,0xfafafa);
+		addChild(new Bitmap(textblock));
+
+		tileblock = new Tilesheet(Assets.getBitmapData("assets/block.png",false));	
+
+		playbutton = new Bitmap(Assets.getBitmapData("assets/play.png"));
+		playbutton.x = stage.stageWidth/2 - playbutton.get_width()/2;
+		playbutton.y = stage.stageHeight/2 - playbutton.get_height()/2;
+		addChild(playbutton);
 		start();
 	}
 
@@ -73,32 +99,42 @@ class Game extends Sprite
 	{
 		if (state == gamePaused)
 		{
+
 		}
 
 		if (state == gamePlaying)
 		{
-			// main game loop
+			playbutton.visible = false;
+
 
 			gamecounter++;
+
 			if (gamecounter > gamespeed)
 			{
-				gamespeed = 0;
+				gamecounter = 0;
 #if debug
-				trace("spawn tetromino");
+				if (!gameTetro)
+				{
+					trace("spawn tetromino");
+					var newtetro = new Tetromino();
+					gameTetro = true;
+				}
 #end
 
 			}
-		
+	
+
+
 			drawfield();
 
 		}
 
 		if (state == gameIntro)
 		{
+			playbutton.visible = true;
 
 		}
 
-		//	trace("on update");
 	}
 
 
@@ -232,6 +268,7 @@ class Game extends Sprite
 		{
 			haxe.Timer.delay(startmusic,200); 
 		}
+		cleangamefield();
 	
 		
 	}
@@ -251,9 +288,6 @@ class Game extends Sprite
 	
 	public function drawfield()
 	{
-#if debug
-		trace("drawing the playfield");
-#end
 
 	}
 
@@ -269,7 +303,7 @@ class Game extends Sprite
 			gamefield.push(new Array());
 			for (xr in 0...10)
 			{
-				gamefield[yc][xr] = EMPTY_CELL;
+				gamefield[yc][xr] = Cell.cell_empty;
 
 			}
 		}
