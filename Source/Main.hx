@@ -90,7 +90,13 @@ class Main extends Sprite
 			case Keyboard.Q:
 				{
 					SoundManager.getInstance().stopMusic();
+#if mobile					
 					Lib.exit();
+#end
+
+#if linux
+					Lib.exit();
+#end					
 				}
 		}
 		

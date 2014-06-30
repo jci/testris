@@ -324,7 +324,6 @@ class Game extends Sprite
 			newbut.y = ry;
 			newbut.visible = true;
 			drawable.addChild(newbut);
-			trace("spawn " + newbut.z);
 		}
 
 

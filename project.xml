@@ -10,6 +10,7 @@
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
+	<haxelib name="openfl-html5-dom" if="html5" />
 	
 	<assets path="Assets" rename="assets" exclude="openfl.svg" include="*.*" />
 	<icon path="Assets/openfl.svg" />
