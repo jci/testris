@@ -6,6 +6,7 @@
 	<set name="ANDROID_INSTALL_LOCATION" value="auto" />
 
 	<window width="480" height="320" orientation="landscape"  fullscreen="false" fps="30" background="0x000000"  />
+	<window width="480" height="320" orientation="landscape"  fullscreen="true" fps="30" background="0x000000"  if="mobile" />
 	<source path="Source" />
 	
 	<haxelib name="openfl" />
