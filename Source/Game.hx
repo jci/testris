@@ -11,8 +11,7 @@ import openfl.events.KeyboardEvent;
 import openfl.events.Event;
 import openfl.events.EventDispatcher;
 import openfl.events.EventPhase;
-import SoundManager;
-import Tetromino;
+
 import openfl.ui.Keyboard;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
@@ -26,6 +25,12 @@ import openfl.display.Tilesheet;
 import openfl.display.StageScaleMode;
 import openfl.display.StageAlign;
 import openfl.display.StageDisplayState;
+
+
+import SoundManager;
+import Tetromino;
+import Background;
+
 
 enum GameState 
 {
@@ -44,8 +49,8 @@ class Game extends Sprite
 
 	private var state : GameState = gameInit;
 	private var gamestage = Lib.current.stage;
-	private var gamespeed :Int;
-	private var drawable :Sprite;
+	private var gamespeed : Int;
+	private var drawable : Sprite;
 	private var titleText : TextField;
 	private var titleFormat : TextFormat;
 	private var gamecounter : Int;
@@ -64,9 +69,13 @@ class Game extends Sprite
 
 	private var direction : Bool = false;
 
-	private static inline var EMPTY_CELL=0;
+	private static inline var EMPTY_CELL = 0;
 
-	private static inline var scrollspeed=0.2;
+	private static inline var scrollspeed = 0.2;
+
+	private var spawncounter : Int = 0;
+
+	private var mybackground :Background;
 
 
 	// only 6 figures
@@ -74,12 +83,13 @@ class Game extends Sprite
 	public function new(playground:Dynamic)
 	{
 		super();
+
+		drawable = playground;
 		addListeners();
 
 		gamecounter = 0;
 		gamespeed = 200;
 		gameTetro = false;
-		drawable = playground;
 
 		
 	}
@@ -92,10 +102,6 @@ class Game extends Sprite
 
 	public function initgame(event:Event)
 	{
-		current.stage.align = StageAlign.TOP_LEFT;
-		current.stage.scaleMode = StageScaleMode.NO_SCALE;
-
-		// add all the drawables
 
 		playbutton.addChild(new Bitmap(Assets.getBitmapData("assets/play.png")));
 		playbutton.x = stage.stageWidth/2 - playbutton.width/2;
@@ -103,10 +109,14 @@ class Game extends Sprite
 		playbutton.visible = true;
 		playbutton.addEventListener(MouseEvent.MOUSE_DOWN,onClickPlayButton);
 
-		drawable.addChild(playbutton);
 
 		
 		start();
+
+		mybackground = new Background(this);
+		
+		drawable.addChild(mybackground);
+		drawable.addChild(playbutton);
 	}
 
 	public  function update(event:Event)
@@ -301,6 +311,23 @@ class Game extends Sprite
 	
 	public function drawfield()
 	{
+		spawncounter++;
+		if (spawncounter>20)
+		{
+			spawncounter=0;
+			var rx = Std.random(stage.stageWidth);
+			var ry = Std.random(stage.stageHeight);
+
+			var newbut : Sprite = new Sprite();
+			newbut.addChild(new Bitmap(Assets.getBitmapData("assets/play.png",false)));
+			newbut.x = rx;
+			newbut.y = ry;
+			newbut.visible = true;
+			drawable.addChild(newbut);
+			trace("spawn " + newbut.z);
+		}
+
+
 
 	}
 
@@ -331,6 +358,11 @@ class Game extends Sprite
 		{
 			startgame();
 		}
+	}
+
+	public function getGameState()
+	{
+		return state;
 	}
 
 }

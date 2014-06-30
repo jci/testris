@@ -21,6 +21,7 @@ import flash.Lib.current;
 import openfl.events.Event;
 
 import SoundManager;
+import Background;
 
 class Main extends Sprite 
 {
