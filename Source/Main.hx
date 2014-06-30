@@ -72,12 +72,6 @@ class Main extends Sprite
 	{
 		switch (event.keyCode)
 		{
-			case Keyboard.DOWN:
-				SoundManager.getInstance().volumeDown(0.1);
-			case Keyboard.UP:
-				SoundManager.getInstance().volumeUp(0.1);
-			case Keyboard.M:
-				SoundManager.getInstance().mute();
 			case Keyboard.Q:
 				{
 					SoundManager.getInstance().stopMusic();

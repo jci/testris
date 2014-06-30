@@ -25,7 +25,7 @@ class Tetromino
 {
 
 
-	public var cells:Array<Array<Int>>;
+	public var cells:Array<Array<Cell>>;
 	public var x:Int;
 	public var y:Int;
 	public var size:Int;
@@ -42,11 +42,14 @@ class Tetromino
 	{
 		var t1 : Int=0;
 		var t2 : Int=0;
-		var t3 =  new Array<Array<Int>>();
+		var t3 : Array<Array<Cell>> = new Array();
 
 		for (t1 in 0...rows)
+		{
+			t3.push(new Array());
 			for (t2 in 0...cols)
-				t3[t1][t2] = Type.enumIndex(value);
+				t3[t1][t2] = value;
+		}
 		return t3;
 
 	}

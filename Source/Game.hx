@@ -38,10 +38,13 @@ class Game extends Sprite
 
 	private var state : GameState = gameInit;
 	private var gamestage = Lib.current.stage;
-	private var gameSpeed :Float = 0.0;
+	private var gamespeed :Int;
 	private var platform :Sprite;
 	private var titleText : TextField;
 	private var titleFormat : TextFormat;
+	private var gamecounter : Int;
+
+	private var gamefield : Array<Array<Cell>> = new Array();
 
 
 	// only 6 figures
@@ -50,6 +53,14 @@ class Game extends Sprite
 	{
 		super();
 		addListeners();
+
+		gamecounter = 0;
+		gamespeed = 200;
+
+
+		
+		cleangamefield();
+
 	}
 
 	public function initgame(event:Event)
@@ -66,11 +77,25 @@ class Game extends Sprite
 
 		if (state == gamePlaying)
 		{
+			// main game loop
+
+			gamecounter++;
+			if (gamecounter > gamespeed)
+			{
+				gamespeed = 0;
+#if debug
+				trace("spawn tetromino");
+#end
+
+			}
+		
+			drawfield();
+
 		}
 
 		if (state == gameIntro)
 		{
-			// there should be no listeners here
+
 		}
 
 		//	trace("on update");
@@ -97,6 +122,11 @@ class Game extends Sprite
 		trace("onTouchEvent");
 #end
 
+		if (state == gamePlaying)
+		{
+		}
+
+		
 	}
 
 	public function onMouseEvent(event:MouseEvent)
@@ -137,6 +167,38 @@ class Game extends Sprite
 #if debug						
 						trace("gamepaused");
 #end
+					}
+				case Keyboard.LEFT:
+					{
+#if debug
+						trace("move tetromino left");
+#end
+
+					}
+
+				case Keyboard.RIGHT:
+					{
+#if debug						
+						trace("move tetromino right");
+#end						
+					}
+
+				case Keyboard.UP:
+					{
+#if debug
+						trace("rotate tetromino");
+						// should I do cw or ccw? :B
+#end
+
+					}
+				case Keyboard.DOWN:
+					{
+#if debug
+						// shhh...no tears, only dreams
+						// that's due to the amount of if debug
+						trace("drop tetromino");
+#end
+
 					}
 			}
 		}
@@ -186,6 +248,33 @@ class Game extends Sprite
 
 	}
 
+	
+	public function drawfield()
+	{
+#if debug
+		trace("drawing the playfield");
+#end
+
+	}
+
+	public function cleangamefield()
+	{
+		// this is according to wikipedia
+
+		var xr:Int = 0;
+		var yc:Int = 0;
+
+		for (yc in 0...20)
+		{
+			gamefield.push(new Array());
+			for (xr in 0...10)
+			{
+				gamefield[yc][xr] = EMPTY_CELL;
+
+			}
+		}
+
+	}
 
 }
 
