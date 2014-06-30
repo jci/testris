@@ -35,6 +35,7 @@ class SoundManager
 	public function loadMusic(url:String)
 	{
 		backgroundmusic=Assets.getSound(url);
+
 	}
 
 	public function playMusic()
