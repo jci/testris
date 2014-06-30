@@ -8,6 +8,8 @@ import openfl.events.Event;
 import openfl.Lib;
 import openfl.events.KeyboardEvent;
 import openfl.events.Event;
+import openfl.events.EventDispatcher;
+import openfl.events.EventPhase;
 import SoundManager;
 import openfl.ui.Keyboard;
 
@@ -21,15 +23,13 @@ enum GameState
 }
 
 
-
-
-
 class Game
 {
 	// main game class
 
 
 	private var state : GameState = gameInit;
+	private var stage = Lib.current.stage;
 
 	// only 6 figures
 
@@ -43,6 +43,7 @@ class Game
 
 	public function init()
 	{
+		Lib.trace("Here I am, on init");
 	}
 
 	public function update()
@@ -71,10 +72,15 @@ class Game
 	public function addListeners()
 	{
 		
+		Lib.trace("Here I am, on addeventlistener");
+		stage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyPressed);		
 	}
 
 	public function onKeyPressed(event:KeyboardEvent)
 	{
+
+		Lib.trace("Here I am, on onkeypressed");
+
 		if ( state == gamePlaying)
 		{
 			// obey orders only when playing
@@ -89,14 +95,27 @@ class Game
 
 	public function startmusic()
 	{
-		SoundManager.getInstance().loadMusic("assets/tetris.ogg");
-		SoundManager.getInstance().playMusic();
+		if (state == gameInit)
+		{
+			SoundManager.getInstance().loadMusic("assets/koro.ogg");
+			SoundManager.getInstance().playMusic();
+		}
+
+		if (state == gamePlaying)
+		{
+			// diferrent music! :D
+			SoundManager.getInstance().loadMusic("assets/tetris.ogg");
+			SoundManager.getInstance().playMusic();
+		}
 	}
 
 	
 	public function start()
 	{
-		haxe.Timer.delay(startmusic,200); 
+		if (state == gameInit)
+		{
+			haxe.Timer.delay(startmusic,200); 
+		}
 	}
 
 
