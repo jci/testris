@@ -93,9 +93,10 @@ class Main extends Sprite
 		introtext.text="";
 		introtext=null;
 
-		var game = new Game();
-		game.start();
+		var game = new Game(this);
+		stage.addChild(game);
 	}
+
 	
 	
 }
