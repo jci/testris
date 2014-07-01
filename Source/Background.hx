@@ -27,28 +27,14 @@ class Background extends Sprite
 		myparent = _parent;
 		addListeners();
 		counter = 0;
+
+
 	}
 
 	public function init(event:Event)
 	{
 
-		/*
-		switch(myparent.getGameState())
-		{
-			case gameInit:
-				trace("init");
-			case gamePlaying:
-				trace("playing");
-			case gameIntro:
-			case gamePaused:
-			case gameOver:
-				trace("overhaul!");
-		}
-		*/
-
 		this.addEventListener(Event.ENTER_FRAME,update);
-		introfig();
-
 		haxe.Timer.delay(spawn,100);
 	}
 
@@ -57,7 +43,6 @@ class Background extends Sprite
 	{
 		// all listeners go here
 		this.addEventListener(Event.ADDED_TO_STAGE,init);
-		this.addEventListener(Event.REMOVED_FROM_STAGE,destroy);
 	}
 
 
@@ -71,14 +56,17 @@ class Background extends Sprite
 
 	}
 
+	// this is the most horrid hack I've even done ... :(
+
 	function spawn()
-	{
-			var introTet = new IntroTet();
-			addChild(introTet);
-#if debug			
-			trace("rise, my child" + counter);
-#end
-			haxe.Timer.delay(spawn,300);
+	{	
+		counter++;
+		if(counter<100)
+		{
+			addChild(new IntroTet());
+			haxe.Timer.delay(spawn,100);
+			trace("spawn : " + counter);
+		}
 	}
 
 	private function destroy(event:Event)
@@ -93,9 +81,11 @@ class Background extends Sprite
 class IntroTet extends Sprite
 {
 
-	private var fallspeed :Int;
+	private var fallspeed :Float;
 	private var bitmap : Bitmap;
-
+	private var rotationspeed : Float;
+	private var rotater : Bool;
+	
 
 	public function new()
 	{
@@ -107,18 +97,62 @@ class IntroTet extends Sprite
 	{
 		addEventListener(Event.ENTER_FRAME,update);
 
-		fallspeed = Std.random(5)+1;
 		//taddChild(Assets.getBitmapData("assets/14.png",false));
 		var string = "assets/1" + (Std.random(7)+1) + ".png";
 		bitmap = new Bitmap(Assets.getBitmapData(string));
+		addChild(bitmap);
+		randomize();
+	}
+
+	private function randomize()
+	{
 
 		y = -90;
-		x = Std.random(stage.stageWidth);
-		scaleX = Math.random()+0.1;
-		scaleY = scaleX;
-		alpha = Math.random();
-		rotation = Std.random(180);
-		addChild(bitmap);
+		x = Std.random(480);
+
+	
+		var string = "assets/1" + (Std.random(7)+1) + ".png";
+		bitmap = new Bitmap(Assets.getBitmapData(string));
+
+		var sorter = Std.random(5);
+		switch(sorter)
+		{
+			case 0:
+				{
+					// farthest
+					fallspeed=0.4;
+					scaleX=0.3;
+					scaleY=0.3;
+				}
+			case 1:
+				{
+					fallspeed=0.7;
+					scaleX=0.6;
+					scaleY=0.6;
+				}
+			case 2:
+				{
+					// closest
+					fallspeed=1;
+				}
+			case 3:
+				{
+					fallspeed=1.5;
+					scaleX=1.2;
+					scaleY=1.2;
+					y=-200;
+				}
+			case 4:
+				{
+					fallspeed=2.5;
+					scaleX=1.5;
+					scaleY=1.5;
+					y=-300;
+				}
+		}
+
+		var sorter = Std.random(4)*90;
+		rotation = sorter;
 		
 		
 	}
@@ -126,13 +160,24 @@ class IntroTet extends Sprite
 	public function update(event:Event)
 	{
 		y+=fallspeed;
-		if (y > 320)
-			destroy();
+		if (y > 480)
+		{
+			y=-90;
+			randomize();
+		}
+		
+
+		
 	}
 
 	public function destroy()
 	{
-		removeChild(this);
+		
+		removeEventListener(Event.ENTER_FRAME,update);
+		removeEventListener(Event.ADDED_TO_STAGE,init);
+		bitmap = null;
+		this.parent.removeChild(this);
+			
 	}
 
 }
