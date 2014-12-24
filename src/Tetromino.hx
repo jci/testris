@@ -13,6 +13,12 @@ class Tetromino
 		_shape = new Array();
 		init();
 		rotate();
+		draw();
+		rotate();
+		draw();
+		rotate();
+		draw();
+		rotate();
 	}
 
 	private function init()
@@ -50,60 +56,45 @@ class Tetromino
 
 	public function rotate()
 	{
-		// there should be a generic function 
-		// but I am kinda in a hurry
-
-		switch (_type)
-		{
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-				draw();
-				var length1 = _shape[0].length;
-				trace(["length1 "+length1]);
-				if (length1 == 1)
-				{
-					var temparr = new Array();
-					temparr.push([1,1,1,1]);
-					_shape = temparr;
-				}
-				else
-				{
-					var temparr = new Array<Array<Int>>();
-					temparr.push([1]);
-					temparr.push([1]);
-					temparr.push([1]);
-					temparr.push([1]);
-
-					_shape = temparr;
-				}
-				draw();
-			case 5:
-
-		}
+		trace(["Begin rotate"]);
 		draw();
-		
+		var temparray = new Array<Array<Int>>();
+		for (cle in 0..._shape[0].length)
+		{
+			temparray[cle] = new Array<Int>();
+		}
+
+		var ver = _shape.length;
+		var hor = _shape[0].length;
+
+		for (i in 0...ver)
+		{
+			for (j in 0...hor)
+			{
+
+				temparray[j][ver-i-1] = _shape[i][j];
+				
+			}
+		}
+
+		_shape = temparray;
+		trace(["End rotate"]);
 	}
 
-	private function draw()
+	private function draw( )
 	{
 
-		trace(["Calling draw"]);
 		for (i in 0..._shape.length  )
 		{
 			var string : String = "";
 			for (j in 0..._shape[i].length)
 			{
 				string += "" + _shape[i][j];
-
-
 			}
 
-				trace(["" + string]);
+			trace(["" + string]);
 		}
 
 	}
-
-	
 }
+
