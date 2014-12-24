@@ -56,8 +56,6 @@ class Tetromino
 
 	public function rotate()
 	{
-		trace(["Begin rotate"]);
-		draw();
 		var temparray = new Array<Array<Int>>();
 		for (cle in 0..._shape[0].length)
 		{
@@ -71,18 +69,16 @@ class Tetromino
 		{
 			for (j in 0...hor)
 			{
-
 				temparray[j][ver-i-1] = _shape[i][j];
-				
 			}
 		}
 
 		_shape = temparray;
-		trace(["End rotate"]);
 	}
 
 	private function draw( )
 	{
+		trace(["Begin Draw==========="]);
 
 		for (i in 0..._shape.length  )
 		{
@@ -94,6 +90,9 @@ class Tetromino
 
 			trace(["" + string]);
 		}
+
+
+		trace(["End Draw==========="]);
 
 	}
 }
