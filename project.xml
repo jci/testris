@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	
-	<meta title="Testris" package="com.jcigaems.testris" version="0.0.1" company="jCi gaems" />
-	<app main="Main" path="Export" file="testris" title="Testris" />
-	<set name="ANDROID_INSTALL_LOCATION" value="auto" />
+	<meta title="testris" package="com.liquidmemorygames.testris" version="0.0.1" company="Liquid Memory Games" />
 
-	<window width="480" height="320" orientation="landscape"  fullscreen="false" fps="30" background="0x000000"  />
-	<window width="480" height="320" orientation="landscape"  fullscreen="true" fps="30" background="0x000000"  if="mobile" />
-	<source path="Source" />
-	
-	<haxelib name="openfl" />
-	<haxelib name="openfl-html5-dom" if="html5" />
-	
-	<assets path="Assets" rename="assets" exclude="openfl.svg" include="*.*" />
-	<icon path="Assets/openfl.svg" />
-	
+ 	<app file="Main" main="Main" path="bin" />
+
+	<window fps="60" background="0x333333" />
+	<window width="640" height="480" resizable="true" unless="mobile" />
+	<window fullscreen="true" if="mobile" />
+	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />
+
+	<source path="src" />
+
+	<haxelib name="HaxePunk" />
+
+	<assets path="assets/graphics" rename="graphics" include="*.png|*.jpg" />
+	<assets path="assets/audio" rename="audio" include="*.mp3" if="flash" />
+	<assets path="assets/audio" rename="audio" include="*.wav|*.ogg" unless="flash" />
+	<assets path="assets/font" rename="font" include="*.ttf" />
+
+	<icon path="assets/HaxePunk.svg" />
 </project>
