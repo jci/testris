@@ -10,14 +10,13 @@ class Gamescene extends Scene
 	private var _gamestate : Int;
 	private var _clocktick : Float;
 	private var _clocktickamount : Float;
-	private static var _maxspeed : Float = 100;
+	private static var _maxspeed : Float = 10;
 
 	public override function begin()
 	{
 
 		_clocktick = 0;
 		_clocktickamount = 0.5;
-
 
 		_gamestate = 0;
 
@@ -38,13 +37,19 @@ class Gamescene extends Scene
 		if (_clocktick > _maxspeed)
 		{
 			_clocktick = 0;
+			renderPlayfield(_playfield);
+			var tetro = new Tetromino();
+
 		}
 
-		renderPlayfield(_playfield);
+
 	}
 
 	private function renderPlayfield(playfield : Playfield)
 	{
-		// render the whole stuff
+		//trace([""]);
+		//playfield.drawplayfield();
+
+		//trace([""]);
 	}
 }

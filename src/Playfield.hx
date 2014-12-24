@@ -1,14 +1,18 @@
 import com.haxepunk.graphics.Image;
+import com.haxepunk.Entity;
+
 
 class Playfield
 {
 
 	private var _playfield : Array<Array<Int>>;
-
+	private var _battlefield : Entity;
+	private var _overlay : Entity;
 
 	public function new()
 	{
 		// initialize
+		trace(["new playfield"]);
 		init();
 	}
 
@@ -28,6 +32,9 @@ class Playfield
 			}
 			_playfield.push(line);
 		}
+
+		_battlefield = new Entity();
+		_overlay = new Entity();
 
 
 
