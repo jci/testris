@@ -3,16 +3,15 @@ import com.haxepunk.Entity;
 import com.haxepunk.Scene;
 
 
-class Playfield extends Entity
+class Playfield 
 {
 
 	private var _playfield : Array<Array<Int>>;
-	public var battlefield : Entity;
+	public var battlefield : Array<Entity>;
 	private var _overlay : Entity;
 
-	public override function new()
+	public  function new()
 	{
-		super();
 		// initialize
 		trace(["new playfield"]);
 		init();
@@ -22,6 +21,7 @@ class Playfield extends Entity
 	{
 
 		_playfield = new Array<Array<Int>>();
+		battlefield = new Array<Entity>();
 
 		// for how much, you say?
 
@@ -31,16 +31,16 @@ class Playfield extends Entity
 			for (j in 0...10)
 			{
 				line.push(0);
+				var entitytemp = new Entity();
+				var tempimage = new Image("graphics/blank.png");
+				entitytemp.graphic =  tempimage;
+				entitytemp.x = 100 + j*tempimage.height;
+				entitytemp.y = 100 +  i*tempimage.width;
+				battlefield.push(entitytemp);
 			}
 			_playfield.push(line);
 		}
 
-		x = 100;
-		y = 100;
-
-		graphic = new Image("graphics/13.png");
-
-		drawplayfield();
 
 	}	
 
@@ -49,50 +49,52 @@ class Playfield extends Entity
 		// determine the position of the entity
 	}
 
-	public function drawplayfield()
+	public function drawplayfield(tet : Tetromino)
 	{
-		renderPlayfield();
-		return;
-		// 
+
+		var wit = tet.getwidth();
+		var hei = tet.getheight();
+
+		var tempimage =  new Image("graphics/block.png");
+		var tempblank = new Image("graphics/blank.png");
+
 		for (i in 0...20)
 		{
 			var mstring :String = "";
 			for (j in 0...10)
 			{
-				mstring += _playfield[i][j] + " ";
-			}
-			trace([mstring]);
-		}
-	}
+				var value = _playfield[i][j];
+				var posabs = i*10 + j;
 
-	public function renderPlayfield(tet : Tetromino = null)
-	{
-		// render the whole thing
-
-		return;
-
-		if (tet != null)
-		{
-
-			for (j in 0...20)
-			{
-				for (i in 0...10)
+				if (value==0)
 				{
-					var valor = _playfield[i][j];
-					var ypos = j*10;
-					var xpos = i * 10;
-					graphic = new Image("graphics/block.png");
-
-
-
-
-
+					battlefield[posabs].graphic = tempblank;
 				}
+				else
+				{
+
+					battlefield[posabs].graphic = tempimage;
+				}
+
 			}
-
-
-
 		}
 
+		// now the tetro
+
+		var tempshape = tet.getshape();
+		tet.draw();
+
+		for (i in 0...hei)
+		{
+			for (j in 0...wit)
+			{
+				var row = tet.getrow();
+				var col = tet.getcol();
+				var value = tempshape[i][j];
+				trace(["" + value + "value on" +""+i + " " + j ]);
+
+			}
+		}
 	}
+
 }

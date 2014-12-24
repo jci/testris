@@ -23,7 +23,7 @@ class Gamescene extends Scene
 		if (_gamestate == 0)
 		{
 			_playfield = new Playfield();
-			add(_playfield);
+			addList(_playfield.battlefield);
 		}
 
 
@@ -40,18 +40,17 @@ class Gamescene extends Scene
 		if (_clocktick > _maxspeed)
 		{
 			_clocktick = 0;
-			renderPlayfield(_playfield);
 			var tetro = new Tetromino();
+			tetro.movedown();
+			renderPlayfield(tetro);	
 
 		}
 
 
 	}
 
-	private function renderPlayfield(playfield : Playfield)
+	private function renderPlayfield(tetro: Tetromino)
 	{
-		playfield.drawplayfield();
-
-		//trace([""]);
+		_playfield.drawplayfield(tetro);
 	}
 }

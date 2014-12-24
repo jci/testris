@@ -1,4 +1,5 @@
 import com.haxepunk.Entity;
+import com.haxepunk.graphics.Image;
 
 class Tetromino
 {
@@ -8,9 +9,10 @@ class Tetromino
 	private var _row : Int;
 	private var _col : Int;
 
+
 	public function new()
 	{
-		_shape = new Array();
+
 		init();
 		rotate();
 		rotate();
@@ -19,6 +21,8 @@ class Tetromino
 
 	private function init()
 	{
+
+		_shape = new Array();
 		var shape = Math.random()*6;
 		_type = Std.int(shape);
 		switch (shape)
@@ -48,6 +52,11 @@ class Tetromino
 				_shape.push([1,1]);
 				_shape.push([1,0]);
 		}
+
+		_row = 0;
+		_col = 0;
+
+
 	}
 
 	public function rotate()
@@ -72,7 +81,7 @@ class Tetromino
 		_shape = temparray;
 	}
 
-	private function draw( )
+	public  function draw( )
 	{
 
 		for (i in 0..._shape.length  )
@@ -86,8 +95,38 @@ class Tetromino
 			trace(["" + string]);
 		}
 
-
-
 	}
+
+	public function movedown()
+	{
+		_row++;
+	}
+
+	public function getrow()
+	{
+		return _row;
+	}
+
+	public function getcol()
+	{
+		return _col;
+	}
+
+	public function getwidth()
+	{
+		return _shape[0].length;
+	}
+
+	public function getheight()
+	{
+		return _shape.length;
+	}
+
+	public function getshape()
+	{
+		return _shape;
+	}
+
+
 }
 
