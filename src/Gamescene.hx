@@ -23,7 +23,10 @@ class Gamescene extends Scene
 		if (_gamestate == 0)
 		{
 			_playfield = new Playfield();
+			add(_playfield);
 		}
+
+
 
 	}
 
@@ -47,8 +50,7 @@ class Gamescene extends Scene
 
 	private function renderPlayfield(playfield : Playfield)
 	{
-		//trace([""]);
-		//playfield.drawplayfield();
+		playfield.drawplayfield();
 
 		//trace([""]);
 	}

@@ -1,16 +1,18 @@
 import com.haxepunk.graphics.Image;
 import com.haxepunk.Entity;
+import com.haxepunk.Scene;
 
 
-class Playfield
+class Playfield extends Entity
 {
 
 	private var _playfield : Array<Array<Int>>;
-	private var _battlefield : Entity;
+	public var battlefield : Entity;
 	private var _overlay : Entity;
 
-	public function new()
+	public override function new()
 	{
+		super();
 		// initialize
 		trace(["new playfield"]);
 		init();
@@ -33,10 +35,12 @@ class Playfield
 			_playfield.push(line);
 		}
 
-		_battlefield = new Entity();
-		_overlay = new Entity();
+		x = 100;
+		y = 100;
 
+		graphic = new Image("graphics/13.png");
 
+		drawplayfield();
 
 	}	
 
@@ -47,6 +51,8 @@ class Playfield
 
 	public function drawplayfield()
 	{
+		renderPlayfield();
+		return;
 		// 
 		for (i in 0...20)
 		{
@@ -57,5 +63,36 @@ class Playfield
 			}
 			trace([mstring]);
 		}
+	}
+
+	public function renderPlayfield(tet : Tetromino = null)
+	{
+		// render the whole thing
+
+		return;
+
+		if (tet != null)
+		{
+
+			for (j in 0...20)
+			{
+				for (i in 0...10)
+				{
+					var valor = _playfield[i][j];
+					var ypos = j*10;
+					var xpos = i * 10;
+					graphic = new Image("graphics/block.png");
+
+
+
+
+
+				}
+			}
+
+
+
+		}
+
 	}
 }

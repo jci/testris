@@ -13,11 +13,7 @@ class Tetromino
 		_shape = new Array();
 		init();
 		rotate();
-		draw();
 		rotate();
-		draw();
-		rotate();
-		draw();
 		rotate();
 	}
 
@@ -78,7 +74,6 @@ class Tetromino
 
 	private function draw( )
 	{
-		trace(["Begin Draw==========="]);
 
 		for (i in 0..._shape.length  )
 		{
@@ -92,7 +87,6 @@ class Tetromino
 		}
 
 
-		trace(["End Draw==========="]);
 
 	}
 }
