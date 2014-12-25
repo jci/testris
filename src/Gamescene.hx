@@ -190,30 +190,32 @@ class Gamescene extends Scene
 			var tt = tetc + i;
 			var th = tetro.getheight();
 			var tettr = tetr-1;
-			var plval = playfield.getvalue(tetr,tt);
-			var trval = tetro.getvalue(tetro.getheight()-1, i);
-
-			if (plval == -1)		// out of bounds!
-				return true;
-
-			if (plval == trval && plval == 1)
+			for (y in 0...tetro.getheight())
 			{
-				iscol = true;
+				var plval = playfield.getvalue(tetro.getrow()+y+1,tt);
+				
+				var trval = tetro.getvalue(y, i);
+	
+				if (plval == -1)		// out of bounds!
+					return true;
+	
+				if (plval == trval && plval == 1)
+				{
+					iscol = true;
+				}
+				trace(y);
 			}
-
-			string += "tetr : " + tetr + " tt : " + tt + " trval: " + trval + " plval: " + plval;
+			//string += "tetr : " + tetr + " tt : " + tt + " trval: " + trval + " plval: " + plval;
 
 		}
 
 		if (iscol)
 		{
 			// dump the contents
-			trace(string);
+			//trace(string);
 			return true;
 		}
 		return false;
-
-
 
 
 	}
