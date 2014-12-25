@@ -199,7 +199,7 @@ class Gamescene extends Scene
 			if (plval == trval && plval == 1)
 			{
 				iscol = true;
-				string += "tetr : " + tetr ;
+				string += "tetr : " + tetr + "tt : " + tt + " trval: " + trval + " plval: " + plval;
 			}
 
 
