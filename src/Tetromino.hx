@@ -56,11 +56,27 @@ class Tetromino
 		_row = 0;
 		_col = 0;
 
+		//
+
+		var g = getwidth();
+
 
 	}
 
 	public function rotate()
 	{
+
+		// first, let's check if the rotation is possible
+
+		var hei = getwidth();
+		if (hei + _row >= 20)
+		{
+			// this shit NEEDS to be checked on the 
+			// playfield, not on the tetro!
+
+			// but it was a nice proof of concept :D
+			return;
+		}
 		var temparray = new Array<Array<Int>>();
 		for (cle in 0..._shape[0].length)
 		{
@@ -131,7 +147,12 @@ class Tetromino
 
 	public function moveleft()
 	{
+		if (_col<=0)
+		{
+			return false;
+		}
 		_col--;
+		return true;
 	}
 
 	public function moveright()
@@ -140,6 +161,16 @@ class Tetromino
 			return false;
 		_col++;
 		return true;
+	}
+
+	public function setcol(col : Int)
+	{
+		_col = col;
+	}
+
+	public function getvalue(row : Int, col: Int)
+	{
+		return _shape[row][col];
 	}
 
 

@@ -78,7 +78,7 @@ class Playfield
 
 		var tempshape = tet.getshape();
 		var row = tet.getrow();
-		trace(row);
+		//trace(row);
 		var col = tet.getcol();
 		tet.draw();
 
@@ -96,6 +96,44 @@ class Playfield
 				
 			}
 		}
+	}
+
+	public function addtetro(tetro : Tetromino)
+	{
+		var tetr = tetro.getrow();
+		var tetc = tetro.getcol();
+
+		var teth = tetro.getheight();
+		var tetw = tetro.getwidth();
+
+		for (i in 0...teth)
+		{
+			for (j in 0...tetw)
+			{
+				var temp1 = tetr + i;
+				var temp2 = tetc + j;
+
+				var value = tetro.getvalue(i,j);
+				var string = "temp1 (r):" +  temp1 + " -- temp2 (c) :  " + temp2 + "value : $value " + value;
+				//trace(["temp1 (r):" +  temp1 + " -- temp2 (c) :  " + temp2 + "value : " + value ]);
+				trace(string);
+
+				_playfield[temp1][temp2] = tetro.getvalue(i,j);
+
+				
+			}
+		}
+
+	}
+
+	public function getfield()
+	{
+		return _playfield;
+	}
+
+	public function setfield(playfield : Array<Array<Int>>)
+	{
+		_playfield = playfield;
 	}
 
 }
