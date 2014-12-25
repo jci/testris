@@ -203,16 +203,12 @@ class Gamescene extends Scene
 				{
 					iscol = true;
 				}
-				trace(y);
 			}
-			//string += "tetr : " + tetr + " tt : " + tt + " trval: " + trval + " plval: " + plval;
 
 		}
 
 		if (iscol)
 		{
-			// dump the contents
-			//trace(string);
 			return true;
 		}
 		return false;
