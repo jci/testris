@@ -92,14 +92,16 @@ class Tetromino
 				string += "" + _shape[i][j];
 			}
 
-			trace(["" + string]);
+			//trace(["" + string]);
 		}
 
 	}
 
 	public function movedown()
 	{
+		if ((_row + getheight()) >=20) 	return false;
 		_row++;
+		return true;
 	}
 
 	public function getrow()
@@ -126,6 +128,20 @@ class Tetromino
 	{
 		return _shape;
 	}
+
+	public function moveleft()
+	{
+		_col--;
+	}
+
+	public function moveright()
+	{
+		if (_col+getwidth()>=10)
+			return false;
+		_col++;
+		return true;
+	}
+
 
 
 }

@@ -12,8 +12,6 @@ class Playfield
 
 	public  function new()
 	{
-		// initialize
-		trace(["new playfield"]);
 		init();
 	}
 
@@ -22,8 +20,6 @@ class Playfield
 
 		_playfield = new Array<Array<Int>>();
 		battlefield = new Array<Entity>();
-
-		// for how much, you say?
 
 		for (i in 0...20)
 		{
@@ -79,20 +75,25 @@ class Playfield
 			}
 		}
 
-		// now the tetro
 
 		var tempshape = tet.getshape();
+		var row = tet.getrow();
+		trace(row);
+		var col = tet.getcol();
 		tet.draw();
 
 		for (i in 0...hei)
 		{
 			for (j in 0...wit)
 			{
-				var row = tet.getrow();
-				var col = tet.getcol();
-				var value = tempshape[i][j];
-				trace(["" + value + "value on" +""+i + " " + j ]);
 
+				if (tempshape[i][j] == 1)
+				{
+					var tempv = (row+i) * 10 + (col+j);
+					battlefield[tempv].graphic = tempimage;
+
+				}
+				
 			}
 		}
 	}
