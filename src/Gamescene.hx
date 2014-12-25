@@ -129,7 +129,9 @@ class Gamescene extends Scene
 
 			if (Input.pressed("quitgame"))
 			{
+#if desktop
 				Sys.exit(0);
+#end
 			}
 		}
 
