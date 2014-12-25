@@ -34,6 +34,11 @@ class Gamescene extends Scene
 	private var _spawntick : Float;
 	private static var _maxspeed : Float = 10;
 	private var tetro : Tetromino;
+	
+	public override function new()
+	{
+		super();
+	}
 
 	public override function begin()
 	{
@@ -120,11 +125,6 @@ class Gamescene extends Scene
 				return;
 			}
 
-			if (Input.pressed("newtetro"))
-			{
-				_gamestate = SPAWNTETRO;
-				return;
-			}
 
 
 			if (Input.pressed("quitgame"))
@@ -199,12 +199,9 @@ class Gamescene extends Scene
 			if (plval == trval && plval == 1)
 			{
 				iscol = true;
-				string += "tetr : " + tetr + "tt : " + tt + " trval: " + trval + " plval: " + plval;
 			}
 
-
-
-
+			string += "tetr : " + tetr + " tt : " + tt + " trval: " + trval + " plval: " + plval;
 
 		}
 
