@@ -9,21 +9,20 @@ class Tetromino
 	private var _row : Int;
 	private var _col : Int;
 
+	private static var MAX_SHAPES = 7;
+
 
 	public function new()
 	{
 
 		init();
-		rotate();
-		rotate();
-		rotate();
 	}
 
 	private function init()
 	{
 
 		_shape = new Array();
-		var shape = Math.random()*6;
+		var shape = Math.random()*MAX_SHAPES;
 		_type = Std.int(shape);
 		switch (shape)
 		{
@@ -51,14 +50,26 @@ class Tetromino
 				_shape.push([0,1]);
 				_shape.push([1,1]);
 				_shape.push([1,0]);
+			case 6:
+				_shape.push([0,1]);
+				_shape.push([0,1]);
+				_shape.push([1,1]);
+
 		}
 
 		_row = 0;
 		_col = 0;
 
-		//
+		if (getwidth()==1)
+		{
+			_col=5;
+		}
+		else
+		{
+		var g = cast(getwidth()/2, Int);
+		_col = 5 - g;
+		}
 
-		var g = getwidth();
 
 
 	}
@@ -69,12 +80,9 @@ class Tetromino
 		// first, let's check if the rotation is possible
 
 		var hei = getwidth();
+
 		if (hei + _row >= 20)
 		{
-			// this shit NEEDS to be checked on the 
-			// playfield, not on the tetro!
-
-			// but it was a nice proof of concept :D
 			return;
 		}
 		var temparray = new Array<Array<Int>>();
@@ -95,6 +103,12 @@ class Tetromino
 		}
 
 		_shape = temparray;
+//		trace(_col + getwidth());
+		if (_col + getwidth() > 10)
+		{
+			_col--;
+		}
+
 	}
 
 	public  function draw( )

@@ -2,6 +2,7 @@ import com.haxepunk.Scene;
 import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Gesture;
 import com.haxepunk.utils.Key;
+import com.haxepunk.Sfx;
 
 enum GameLoop {
 	GAMEPAUSE;
@@ -32,12 +33,26 @@ class Gamescene extends Scene
 	private var _clocktick : Float;
 	private var _clocktickamount : Float;
 	private var _spawntick : Float;
-	private static var _maxspeed : Float = 10;
+	private static var _maxspeed : Float = 30;
 	private var tetro : Tetromino;
+	private var score : Int = 0;
+	private var music : Sfx;
 	
 	public override function new()
 	{
 		super();
+		Input.define("right", [Key.E, Key.RIGHT]);
+		Input.define("down", [Key.D, Key.DOWN]);
+		Input.define("left", [Key.W, Key.LEFT]);
+		Input.define("rotate", [Key.R,Key.UP]);
+		Input.define("newtetro", [Key.N]);
+		Input.define("quitgame", [Key.Q]);
+		Input.define("pause", [Key.P]);
+		Input.define("drop", [Key.SPACE]);
+
+		music = new Sfx("audio/ozma-koro.ogg");
+
+
 	}
 
 	public override function begin()
@@ -49,22 +64,14 @@ class Gamescene extends Scene
 		addList(_playfield.battlefield);
 
 		_gamestate = SPAWNTETRO;
+		score = 0;
+		music.play();
 
-		Input.define("right", [Key.E, Key.RIGHT]);
-		Input.define("down", [Key.D, Key.DOWN]);
-		Input.define("left", [Key.W, Key.LEFT]);
-		Input.define("rotate", [Key.R,Key.UP]);
-		Input.define("newtetro", [Key.N]);
-		Input.define("quitgame", [Key.Q]);
-		Input.define("pause", [Key.P]);
-		Input.define("drop", [Key.SPACE]);
 
 	}
 
 	public override function update()
 	{
-
-		super.update();
 
 		if (_gamestate == SPAWNTETRO)
 		{
@@ -76,43 +83,38 @@ class Gamescene extends Scene
 
 		if (_gamestate == PLAYLOOP)
 		{
+			if (!music.playing)
+			{
+				music.play();
+			}
 
 			_clocktick += _clocktickamount;
-			_spawntick += _clocktickamount;
-
-			renderPlayfield(tetro);	
 
 			if (_clocktick > _maxspeed)
 			{
-				_clocktick = 0;
-
 				tetro.movedown();
-				return;
-
+				_clocktick = 0;
 			}
 
 
 			if (Input.pressed ("right"))
 			{
 				tetro.moveright();
-				return;
 			}
 
 			if (Input.pressed("drop"))
 			{
 				droptetro();
-				return;
 			}
 
 
 
-			if (Input.pressed ("left"))
+			if (Input.pressed(Key.LEFT))
 			{
 				tetro.moveleft();
-				return;
 			}
 
-			if (Input.pressed ("down"))
+			if (Input.pressed (Key.DOWN))
 			{
 				tetro.movedown();
 				return;
@@ -122,10 +124,7 @@ class Gamescene extends Scene
 			if (Input.pressed("rotate"))
 			{
 				tetro.rotate();
-				return;
 			}
-
-
 
 			if (Input.pressed("quitgame"))
 			{
@@ -133,6 +132,8 @@ class Gamescene extends Scene
 				Sys.exit(0);
 #end
 			}
+
+			renderPlayfield(tetro);	
 		}
 
 			if (Input.pressed("pause"))
@@ -140,13 +141,11 @@ class Gamescene extends Scene
 				if (_gamestate == PLAYLOOP)
 				{
 					_gamestate = GAMEPAUSE;
-					return;
 				}
 
 				if (_gamestate == GAMEPAUSE)
 				{
 					_gamestate = PLAYLOOP;
-					return;
 				}
 
 			}
@@ -159,6 +158,9 @@ class Gamescene extends Scene
 			}
 		}
 
+
+		super.update();
+
 	}
 
 	private function renderPlayfield(tetro: Tetromino)
@@ -170,12 +172,15 @@ class Gamescene extends Scene
 		if (collision(_playfield, tetro))
 		{
 			_playfield.addtetro(tetro);
+			checkforlines(_playfield);
 			_gamestate = SPAWNTETRO;
 			if (tetro.getrow()==0)
 			{
 				_gamestate = GAMEOVER;
 			}
 		}
+
+
 
 
 	}
@@ -224,6 +229,26 @@ class Gamescene extends Scene
 		{
 			if (collision(_playfield,tetro))
 				return;
+		}
+	}
+
+	function checkforlines(playfield : Playfield)
+	{
+		var lines = playfield.checkforlines();
+		if (lines!=0)
+		{
+			// yes, I know...
+			trace("Lines " + lines);
+			playfield.clearlines();
+			score += lines;
+			trace("Score : " + score);
+			_playfield.drawplayfield(tetro);
+
+			//
+			var mysfx = new Sfx("audio/test2.ogg");
+			mysfx.play();
+
+			
 		}
 	}
 

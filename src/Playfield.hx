@@ -144,4 +144,102 @@ class Playfield
 		return _playfield[row][col];
 	}
 
+	public function checkforlines():Int
+	{
+
+		var numlines = 0;
+
+		for (row in 0...20)
+		{
+			var rowval = 0;
+			for (col in 0...10)
+			{
+				if (getvalue(row,col)==1)
+				{
+					rowval++;
+				}
+			}
+
+			if (rowval==10)
+			{
+				numlines++;
+			}
+		}
+		return numlines;
+
+	}
+
+	public function clearlines()
+	{
+		trace("Called clear lines");
+		var tempfield = getfield();
+		clearrow(0);
+
+
+		for (row in 0...20)
+		{
+			var rowval = 0;
+			for (col in 0...10)
+			{
+				rowval += getvalue(row,col);
+				if (rowval ==10)
+				{
+					trace ("we need clearance on row " + row);
+					//clearrow(row);
+				}
+
+			}
+		}
+
+	}
+
+	private function clearrow(row : Int)
+	{
+
+		var tempfield = _playfield.copy();
+		var newfield = new Array<Array<Int>>();
+		//tempfield.unshift([0,0,0,0,0,0,0,0,0,0]);
+
+		for (i in 0...tempfield.length)
+		{
+			var vals = tempfield.shift();
+			var sumval = 0;
+			for (j in 0...vals.length)
+			{
+				sumval += vals[j];
+			}
+
+			if (sumval == 10)
+			{
+				newfield.unshift([0,0,0,0,0,0,0,0,0,0]);
+			}
+			else
+			{
+				newfield.push(vals);
+			}
+
+		}
+
+		_playfield = newfield;
+
+	
+	}
+
+	private function draw(playfield : Array<Array<Int>>)
+	{
+		var vals : String = "Playfield : \n=====================\n";
+
+		for (row in 0...playfield.length)
+		{
+			vals += " row " + row + " -->"; 
+			for (col in 0...playfield[row].length)
+			{
+				vals += playfield[row][col];
+			}
+			vals += "\n";
+		}
+
+		trace(vals);
+	}
+
 }
