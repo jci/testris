@@ -173,6 +173,11 @@ class Tetromino
 		return _shape[row][col];
 	}
 
+	public function gettype()
+	{
+		return _type;
+	}
+
 
 
 }

@@ -116,11 +116,12 @@ class Playfield
 				var value = tetro.getvalue(i,j);
 				var string = "temp1 (r):" +  temp1 + " -- temp2 (c) :  " + temp2 + "value : $value " + value;
 				//trace(["temp1 (r):" +  temp1 + " -- temp2 (c) :  " + temp2 + "value : " + value ]);
-				trace(string);
-
-				_playfield[temp1][temp2] = tetro.getvalue(i,j);
-
-				
+				//trace(string);
+				var tetg = tetro.getvalue(i,j);
+				if (tetg == 1)
+				{
+					_playfield[temp1][temp2] = tetro.getvalue(i,j);
+				}
 			}
 		}
 
@@ -134,6 +135,13 @@ class Playfield
 	public function setfield(playfield : Array<Array<Int>>)
 	{
 		_playfield = playfield;
+	}
+
+	public function getvalue(row : Int, col : Int)
+	{
+		if (row >=20)
+			return -1;
+		return _playfield[row][col];
 	}
 
 }
