@@ -48,10 +48,11 @@ class Gamescene extends Scene
 		Input.define("right", [Key.E, Key.RIGHT]);
 		Input.define("down", [Key.D, Key.DOWN]);
 		Input.define("left", [Key.W, Key.LEFT]);
-		Input.define("rotate", [Key.R]);
+		Input.define("rotate", [Key.R,Key.UP]);
 		Input.define("newtetro", [Key.N]);
 		Input.define("quitgame", [Key.Q]);
 		Input.define("pause", [Key.P]);
+		Input.define("drop", [Key.SPACE]);
 
 	}
 
@@ -71,21 +72,17 @@ class Gamescene extends Scene
 		if (_gamestate == PLAYLOOP)
 		{
 
-			renderPlayfield(tetro);	
-
 			_clocktick += _clocktickamount;
 			_spawntick += _clocktickamount;
+
+			renderPlayfield(tetro);	
 
 			if (_clocktick > _maxspeed)
 			{
 				_clocktick = 0;
-				if (tetro != null)
-				{
-					if (tetro.movedown())
-					{
-	
-					}
-				}
+
+				tetro.movedown();
+				return;
 
 			}
 
@@ -93,6 +90,12 @@ class Gamescene extends Scene
 			if (Input.pressed ("right"))
 			{
 				tetro.moveright();
+				return;
+			}
+
+			if (Input.pressed("drop"))
+			{
+				droptetro();
 				return;
 			}
 
@@ -146,8 +149,13 @@ class Gamescene extends Scene
 
 			}
 
-
-
+		if (_gamestate == GAMEOVER)
+		{
+			if (Input.pressed("newtetro"))
+			{
+				begin();
+			}
+		}
 
 	}
 
@@ -159,61 +167,67 @@ class Gamescene extends Scene
 
 		if (collision(_playfield, tetro))
 		{
-			trace("collision");
 			_playfield.addtetro(tetro);
 			_gamestate = SPAWNTETRO;
+			if (tetro.getrow()==0)
+			{
+				_gamestate = GAMEOVER;
+			}
 		}
+
+
 	}
 
 	private function collision(playfield : Playfield, tetro : Tetromino)
 	{
 		var tetr = tetro.getrow()+tetro.getheight();
 		var tetc = tetro.getcol();
-
-		//trace("tetr " + tetr + " " + "tetc : " + tetc + "  " + playfield.getvalue(tetr,tetc));
-	
-		var string :String = "";
 		var iscol = false;
+		var string : String = "";
 
 		for (i in 0...tetro.getwidth())
 		{
 			var tt = tetc + i;
-			//trace("tt : " + tt);
 			var th = tetro.getheight();
 			var tettr = tetr-1;
 			var plval = playfield.getvalue(tetr,tt);
 			var trval = tetro.getvalue(tetro.getheight()-1, i);
-			if (plval ==1 || plval == -1)			
-			{
-				trace("tettr " + tetr + " tt " + tt + " value " + plval + " tetro " + trval);
-				iscol = true;
-			}
-			if (plval == trval && trval == 1)
-			{
 
-			}
-
-		}
-
-		///
-		for (ccol in tetc...tetc + tetro.getwidth())
-		{
-		//	trace("lol");
-			var tetr1 = tetr ;
-			var plvalue = playfield.getvalue(tetr1,ccol);
-			if (plvalue == -1)
+			if (plval == -1)		// out of bounds!
 				return true;
-			if (plvalue == 1)
+
+			if (plval == trval && plval == 1)
 			{
+				iscol = true;
+				string += "tetr : " + tetr ;
 			}
-		
-			string+= "row : " + tetr1 + " ccol : " + ccol + "  value : " + plvalue + "  -- ";	
+
+
+
+
+
 		}
 
-		//trace(string);
-
+		if (iscol)
+		{
+			// dump the contents
+			trace(string);
+			return true;
+		}
 		return false;
 
+
+
+
+	}
+
+	function droptetro()
+	{
+		while(tetro.movedown())
+		{
+			if (collision(_playfield,tetro))
+				return;
+		}
 	}
 
 
