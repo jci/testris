@@ -78,6 +78,8 @@ class Gamescene extends Scene
 		_gamestate = SPAWNTETRO;
 		score = 0;
 		music.play();
+		// 
+		nextetro = new Tetromino();
 
 
 	}
@@ -87,7 +89,7 @@ class Gamescene extends Scene
 
 		if (_gamestate == SPAWNTETRO)
 		{
-			tetro = new Tetromino();
+			tetro = nextetro;
 			nexttetro = new Tetromino();
 			_gamestate = PLAYLOOP;
 			return;
