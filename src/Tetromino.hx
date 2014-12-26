@@ -147,7 +147,29 @@ class Tetromino
 
 	public function getwidth()
 	{
+
+#if html5
+		// really?! 
+
+		var valor : Int = 0;
+		for (i in 0..._shape.length)
+		{
+			for (j in 0..._shape[i].length)
+			{
+				if (j==0)
+				{
+					valor = _shape[i].length;
+
+				}
+			}
+		}
+		//
+
+		return valor;
+#else
 		return _shape[0].length;
+#end	
+			
 	}
 
 	public function getheight()

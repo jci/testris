@@ -59,7 +59,7 @@ class Gamescene extends Scene
 	private var _clocktick : Float;
 	private var _clocktickamount : Float;
 	private var _spawntick : Float;
-	private static var _maxspeed : Float = 30;
+	private static var _maxspeed : Float = 40;
 	private var tetro : Tetromino;
 	private var nexttetro : Tetromino;
 	private var score : Int = 0;
@@ -113,7 +113,7 @@ class Gamescene extends Scene
 	public override function begin()
 	{
 
-		trace("" + HXP.width + " -- " + HXP.height);
+		//trace("" + HXP.width + " -- " + HXP.height);
 
 		_playfield = new Playfield();
 		_clocktick = 0;
@@ -135,6 +135,8 @@ class Gamescene extends Scene
 
 		super.update();
 
+
+
 		if (_gamestate == SPAWNTETRO)
 		{
 			spawntetro();
@@ -143,6 +145,8 @@ class Gamescene extends Scene
 
 		if (_gamestate == PLAYLOOP)
 		{
+
+			renderPlayfield(tetro);	
 			processinput();
 		}
 		
@@ -150,7 +154,14 @@ class Gamescene extends Scene
 		if (_gamestate == GAMEOVER)
 		{
 			music.stop();
-			if (Input.pressed("newtetro"))
+			var gesture =  BUTTONNONE;
+
+			if (Input.mousePressed)
+			{
+				gesture = checkgesture();
+			}
+
+			if (Input.pressed("newtetro") || gesture == BUTTONNEWGAEM)
 			{
 				begin();
 			}
@@ -348,7 +359,7 @@ class Gamescene extends Scene
 
 		}
 
-		trace(howpaint.length);
+		//trace(howpaint.length);
 
 	}
 
@@ -380,48 +391,30 @@ class Gamescene extends Scene
 
 	private function checkgesture(gesture :GestureType = null) : Buttons
 	{
-		if (gesture!=null)
-		{
-			// gesture
+		// mouseinput
+		if (Input.mouseX > 40 && Input.mouseX < 130 && Input.mouseY > 180 && Input.mouseY<260)
+			return BUTTONLEFT;
 
-			var position = gesture;
+		if (Input.mouseX > 580 && Input.mouseX < 670 && Input.mouseY > 180 && Input.mouseY<260)
+			return BUTTONRIGHT;
 
-			if(position.x > 40 && position.x < 130 && position.y > 180 && position.y < 260)
-				return BUTTONLEFT;
-			
-			if (position.x > 580 && position.x < 670 && position.y > 180 && position.y < 260)
-				return BUTTONRIGHT;
+		if (Input.mouseX > 170 && Input.mouseX < 250 && Input.mouseY > 180 && Input.mouseY< 260)
+			return BUTTONROTATELEFT;
 
-			if (position.x > 170 && position.x < 250 && position.y > 180 && position.y< 260)
-				return BUTTONROTATELEFT;
+		if (Input.mouseX > 460 && Input.mouseX < 550 && Input.mouseY > 180 && Input.mouseY < 260)
+			return BUTTONROTATERIGHT;
 
-			if (position.x > 460 && position.x < 540 && position.y > 180 && position.y < 260)
-				return BUTTONROTATERIGHT;
+		if (Input.mouseX > 315 && Input.mouseX < 405 && Input.mouseY > 410 && Input.mouseY < 500)
+			return BUTTONSINK;
 
-			if (position.x > 315 && position.x < 405 && position.y > 410 && position.y < 500)
-				return BUTTONSINK;
+		if (Input.mouseX > 40 && Input.mouseX < 130 && Input.mouseY > 340 && Input.mouseY < 430)
+			return BUTTONDOWN;
 
+		if (Input.mouseX > 580 && Input.mouseX < 670 && Input.mouseY > 340 && Input.mouseY < 430)
+			return BUTTONDOWN;
 
-		}
-		else
-		{
-			// mouseinput
-			if (Input.mouseX > 40 && Input.mouseX < 130 && Input.mouseY > 180 && Input.mouseY<260)
-				return BUTTONLEFT;
-
-			if (Input.mouseX > 580 && Input.mouseX < 670 && Input.mouseY > 180 && Input.mouseY<260)
-				return BUTTONRIGHT;
-
-			if (Input.mouseX > 170 && Input.mouseX < 250 && Input.mouseY > 180 && Input.mouseY< 260)
-				return BUTTONROTATELEFT;
-
-			if (Input.mouseX > 460 && Input.mouseX < 550 && Input.mouseY > 180 && Input.mouseY < 260)
-				return BUTTONROTATERIGHT;
-
-			if (Input.mouseX > 315 && Input.mouseX < 405 && Input.mouseY > 410 && Input.mouseY < 500)
-				return BUTTONSINK;
-
-		}
+		if (Input.mouseX > 280 && Input.mouseX < 430 && Input.mouseY > 100 && Input.mouseY < 400)
+			return BUTTONNEWGAEM;
 
 		return BUTTONNONE;
 	}
@@ -439,17 +432,10 @@ class Gamescene extends Scene
 		var gesture1 = BUTTONNONE;
 		var mousegesture1 = BUTTONNONE;
 
-		if (Gesture.pressed(Gesture.TAP))
-		{
-			var gesture = Gesture.get(Gesture.TAP);
-			gesture1 = checkgesture(gesture);
-		}
-
 		if (Input.mousePressed)
 		{
 			gesture1 = checkgesture();
 		}
-
 
 
 		if (!music.playing)
@@ -469,6 +455,7 @@ class Gamescene extends Scene
 		if (Input.pressed (Key.RIGHT) || gesture1 == BUTTONRIGHT)
 		{
 			tetro.moveright();
+			return;
 		}
 
 		if (Input.pressed(Key.SPACE) || gesture1 == BUTTONSINK)
@@ -479,9 +466,10 @@ class Gamescene extends Scene
 		if (Input.pressed(Key.LEFT) || gesture1 == BUTTONLEFT)
 		{
 			tetro.moveleft();
+			return;
 		}
 
-		if (Input.pressed (Key.DOWN))
+		if (Input.pressed (Key.DOWN) || gesture1 == BUTTONDOWN)
 		{
 			tetro.movedown();
 			return;
@@ -491,6 +479,7 @@ class Gamescene extends Scene
 		if (Input.pressed(Key.UP) || gesture1 == BUTTONROTATELEFT)
 		{
 			tetro.rotate();
+			return;
 		}
 
 		if (gesture1 == BUTTONROTATERIGHT)
@@ -508,15 +497,8 @@ class Gamescene extends Scene
 #end
 		}
 
-		if (Input.mousePressed)
-		{
-			var value1 = Input.mouseX;
-			var value2 = Input.mouseY;
-			trace("value1 : " + value1 + "  value2: " + value2);
-		}
 
 
-		renderPlayfield(tetro);	
 
 	}
 
