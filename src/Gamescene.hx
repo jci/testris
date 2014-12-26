@@ -81,6 +81,8 @@ class Gamescene extends Scene
 	public override function begin()
 	{
 
+		trace("" + HXP.width + " -- " + HXP.height);
+
 		_playfield = new Playfield();
 		_clocktick = 0;
 		_clocktickamount = 1;
@@ -92,6 +94,7 @@ class Gamescene extends Scene
 		// 
 		nexttetro = new Tetromino();
 		rendernexttetro(nexttetro);
+		Gesture.enable();
 
 
 
@@ -100,102 +103,19 @@ class Gamescene extends Scene
 	public override function update()
 	{
 
-
-		if (Input.multiTouchSupported) 	
-		{
-			Input.touchPoints(onTouch);
-		}
-		else
-		{
-			trace("not multitouch!");
-		}
-
-
-
 		super.update();
 
 		if (_gamestate == SPAWNTETRO)
 		{
-
-			trace("Next tetro is " + nexttetro.gettype());
-			tetro = nexttetro;
-			nexttetro = new Tetromino();
-			trace("Next tetro is " + nexttetro.gettype());
-			rendernexttetro(nexttetro);
-			_gamestate = PLAYLOOP;
-
+			spawntetro();
 			return;
-
 		}
 
 		if (_gamestate == PLAYLOOP)
 		{
-			if (!music.playing)
-			{
-				music.play();
-			}
-
-			_clocktick += _clocktickamount;
-
-			if (_clocktick > _maxspeed)
-			{
-				tetro.movedown();
-				_clocktick = 0;
-			}
-
-
-			if (Input.pressed ("right"))
-			{
-				tetro.moveright();
-			}
-
-			if (Input.pressed("drop"))
-			{
-				droptetro();
-			}
-
-			if (Input.pressed(Key.LEFT))
-			{
-				tetro.moveleft();
-			}
-
-			if (Input.pressed (Key.DOWN))
-			{
-				tetro.movedown();
-				return;
-			}
-
-
-			if (Input.pressed("rotate"))
-			{
-				tetro.rotate();
-			}
-
-			if (Input.pressed("quitgame"))
-			{
-#if desktop
-				Sys.exit(0);
-#end
-			}
-
-
-			renderPlayfield(tetro);	
-
-
-			//
-			//experimental gesture type
-			mygesture = new GestureType();
-
-			if (Gesture.check(Gesture.MOVE))
-			{
-				trace("this is a gesture");
-			}
-
-
-
-
-
+			processinput();
 		}
+		
 
 		if (_gamestate == GAMEOVER)
 		{
@@ -226,9 +146,6 @@ class Gamescene extends Scene
 			}
 
 		}
-
-
-
 
 	}
 
@@ -407,38 +324,118 @@ class Gamescene extends Scene
 
 	}
 
-	private function onTouch( touch : Touch)
+
+	private function dogesture(gesture : GestureType)
 	{
+		var startx = gesture.x;
+		var endx = gesture.x2;
 
-
-		var touched : Bool = false;
-		var touch1 : Float = 0;
-		
-
-			if(touch.pressed && !touched)
+		if (startx>HXP.halfHeight && startx < HXP.halfHeight + 200)
+		{
+			if (endx<startx && startx-endx > 30)
 			{
-				touch1 = touch.x;
-				touched = true;
+				tetro.moveleft();
+				return;
 			}
 
-			trace(diference(touch1,touch.x));
+			if (endx>startx && endx-startx > 30)
+			{
+				tetro.moveright();
+				return;
+			}
 
-			if ( diference(touch1, touch.x) > (HXP.width / 12) && touched && touch1 > touch.x ) {
-				trace("left");
-				touched = false;
-			}
-			if ( diference(touch1, touch.x) > (HXP.width / 12) && touched && touch1 < touch.x ) {
-				trace("right");
-				touched = false;
-			}
+
+
+		}
 
 	}
 
-	private function diference(val1:Float, val2: Float)
+	private function checkgesture(gesture : GestureType) : Int
 	{
-		return Math.abs(val1-val2);
+		var lalala = gesture;
+
+		trace("x: " + lalala.x + " y:" + lalala.y);
+
+		return 0;
 	}
 
+	private function spawntetro()
+	{
+			tetro = nexttetro;
+			nexttetro = new Tetromino();
+			rendernexttetro(nexttetro);
+			_gamestate = PLAYLOOP;
+	}
 
+	private function processinput()
+	{
+
+
+		if (Gesture.pressed(Gesture.TAP))
+		{
+			var gesture = Gesture.get(Gesture.TAP);
+			var valuecheck = checkgesture(gesture);
+		}
+
+
+		if (!music.playing)
+		{
+			music.play();
+		}
+
+		_clocktick += _clocktickamount;
+
+		if (_clocktick > _maxspeed)
+		{
+			tetro.movedown();
+			_clocktick = 0;
+		}
+
+
+		if (Input.pressed ("right"))
+		{
+			tetro.moveright();
+		}
+
+		if (Input.pressed("drop"))
+		{
+			droptetro();
+		}
+
+		if (Input.pressed(Key.LEFT))
+		{
+			tetro.moveleft();
+		}
+
+		if (Input.pressed (Key.DOWN))
+		{
+			tetro.movedown();
+			return;
+		}
+
+
+		if (Input.pressed("rotate"))
+		{
+			tetro.rotate();
+		}
+
+		if (Input.pressed("quitgame"))
+		{
+#if desktop
+			Sys.exit(0);
+#end
+		}
+
+		if (Input.mousePressed)
+		{
+			var value1 = Input.mouseX;
+			var value2 = Input.mouseY;
+			trace("value1 : " + value1 + "  value2: " + value2);
+		}
+
+
+		renderPlayfield(tetro);	
+
+	}
 
 }
