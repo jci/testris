@@ -3,6 +3,7 @@ import com.haxepunk.utils.Input;
 import com.haxepunk.utils.Gesture;
 import com.haxepunk.utils.Key;
 import com.haxepunk.Sfx;
+import com.haxepunk.HXP;
 
 enum GameLoop {
 	GAMEPAUSE;
@@ -35,8 +36,12 @@ class Gamescene extends Scene
 	private var _spawntick : Float;
 	private static var _maxspeed : Float = 30;
 	private var tetro : Tetromino;
+	private var nexttetro : Tetromino;
 	private var score : Int = 0;
 	private var music : Sfx;
+
+	public var twidth : Float;
+	public var theight : Float;
 	
 	public override function new()
 	{
@@ -50,7 +55,14 @@ class Gamescene extends Scene
 		Input.define("pause", [Key.P]);
 		Input.define("drop", [Key.SPACE]);
 
+#if flash
+		music = new Sfx("audio/ozma-koro.mp3");
+#else
 		music = new Sfx("audio/ozma-koro.ogg");
+#end
+
+		twidth = HXP.width/2;
+		theight = HXP.height/2;
 
 
 	}
@@ -76,6 +88,7 @@ class Gamescene extends Scene
 		if (_gamestate == SPAWNTETRO)
 		{
 			tetro = new Tetromino();
+			nexttetro = new Tetromino();
 			_gamestate = PLAYLOOP;
 			return;
 
@@ -180,9 +193,6 @@ class Gamescene extends Scene
 			}
 		}
 
-
-
-
 	}
 
 	private function collision(playfield : Playfield, tetro : Tetromino)
@@ -245,7 +255,11 @@ class Gamescene extends Scene
 			_playfield.drawplayfield(tetro);
 
 			//
+#if flash
+			var mysfx = new Sfx("audio/test2.mp3");
+#else
 			var mysfx = new Sfx("audio/test2.ogg");
+#end
 			mysfx.play();
 
 			

@@ -1,6 +1,7 @@
 import com.haxepunk.graphics.Image;
 import com.haxepunk.Entity;
 import com.haxepunk.Scene;
+import com.haxepunk.HXP;
 
 
 class Playfield 
@@ -30,7 +31,8 @@ class Playfield
 				var entitytemp = new Entity();
 				var tempimage = new Image("graphics/blank.png");
 				entitytemp.graphic =  tempimage;
-				entitytemp.x = 100 + j*tempimage.height;
+			//	entitytemp.x = j*tempimage.height + HXP.halfHeight;
+				entitytemp.x = HXP.halfHeight + (j+2)*tempimage.height ;
 				entitytemp.y = 100 +  i*tempimage.width;
 				battlefield.push(entitytemp);
 			}

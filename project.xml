@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<meta title="testris" package="com.liquidmemorygames.testris" version="0.0.1" company="Liquid Memory Games" android:installLocation="internalOnly"/>
+	<meta title="testris" package="com.liquidmemorygames.testris" version="0.0.1" company="Liquid Memory Games" />
 
  	<app file="Main" main="Main" path="bin" />
 
 	<window fps="60" background="0x333333" />
-	<window width="640" height="480" resizable="true" unless="mobile" />
-	<window fullscreen="true" if="mobile" />
+	<window width="700" height="480" resizable="false" unless="mobile" />
+	<window width="0" height="0" resizable="false" orientation="portrait" if="mobile" />
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />
 
 	<source path="src" />
 
 	<haxelib name="HaxePunk" />
 
-	<assets path="assets/graphics" rename="graphics" include="*.png|*.jpg" embed="true"/>
-	<assets path="assets/audio" rename="audio" include="*.mp3" if="flash" />
+	<assets path="assets/graphics" rename="graphics" include="*.png|*.jpg" />
+	<assets path="assets/audio" rename="audio" include="*.mp3" if="flash" embed="false"/>
 	<assets path="assets/audio" rename="audio" include="*.wav|*.ogg" unless="flash" />
 	<!-- 	<assets path="assets/font" rename="font" include="*.ttf" embed="true"/> -->
 
