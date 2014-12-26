@@ -106,6 +106,7 @@ class Tetromino
 //		trace(_col + getwidth());
 		if (_col + getwidth() > 10)
 		{
+			trace("tetro out of bounds!");
 			_col--;
 		}
 

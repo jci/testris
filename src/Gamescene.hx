@@ -13,8 +13,20 @@ enum GameLoop {
 	GAMEOVER;
 	PLAYLOOP;
 	SPAWNTETRO;
-	
+}
 
+enum Buttons {
+	BUTTONNONE;
+	BUTTONLEFT;
+	BUTTONRIGHT;
+	BUTTONROTATELEFT;
+	BUTTONROTATERIGHT;
+	BUTTONDOWN;
+	BUTTONSINK;
+	BUTTONPAUSE;
+	BUTTONQUIT;
+	BUTTONMUTE;
+	BUTTONNEWGAEM; //yeah, it's a NEWGAEM!
 }
 
 /*
@@ -24,8 +36,18 @@ enum GameLoop {
    - Move all the code from the other classes here.
    - Yes, it's a pain, but it is how it should be handled as
    	a) rotation of tetro needs to check collision and cannot be checked inside the tetro code
+			//
+			// fixed by checking the bounds of the tetro:D
+			//
+
 	b) collision needs to be checked inside the scene and not on the playfield (or can it?)
 
+	c) draw next tetromino. 
+	
+			//
+			// Solution was kinda simple : spawn 2 tetros instead of one 
+			// and using just one on the playfield. I could not be happier :D
+			//
 
    */
 class Gamescene extends Scene
@@ -75,6 +97,16 @@ class Gamescene extends Scene
 		createnexttetro();
 
 
+		// creating the overlay
+
+		var myimage = new Image("graphics/overlay.png");
+		myimage.x=0;
+		myimage.y=0;
+		myimage.alpha = 0.5;
+		var myoverlayentity = new Entity();
+		myoverlayentity.layer = 10;
+		myoverlayentity.addGraphic(myimage);
+		this.add(myoverlayentity);
 
 	}
 
@@ -91,12 +123,10 @@ class Gamescene extends Scene
 		_gamestate = SPAWNTETRO;
 		score = 0;
 		music.play();
-		// 
+
 		nexttetro = new Tetromino();
 		rendernexttetro(nexttetro);
 		Gesture.enable();
-
-
 
 	}
 
@@ -152,8 +182,6 @@ class Gamescene extends Scene
 	private function renderPlayfield(tetro: Tetromino)
 	{
 		_playfield.drawplayfield(tetro);
-
-		// here we should detect where's the tetro
 
 		if (collision(_playfield, tetro))
 		{
@@ -350,13 +378,52 @@ class Gamescene extends Scene
 
 	}
 
-	private function checkgesture(gesture : GestureType) : Int
+	private function checkgesture(gesture :GestureType = null) : Buttons
 	{
-		var lalala = gesture;
+		if (gesture!=null)
+		{
+			// gesture
 
-		trace("x: " + lalala.x + " y:" + lalala.y);
+			var position = gesture;
 
-		return 0;
+			if(position.x > 40 && position.x < 130 && position.y > 180 && position.y < 260)
+				return BUTTONLEFT;
+			
+			if (position.x > 580 && position.x < 670 && position.y > 180 && position.y < 260)
+				return BUTTONRIGHT;
+
+			if (position.x > 170 && position.x < 250 && position.y > 180 && position.y< 260)
+				return BUTTONROTATELEFT;
+
+			if (position.x > 460 && position.x < 540 && position.y > 180 && position.y < 260)
+				return BUTTONROTATERIGHT;
+
+			if (position.x > 315 && position.x < 405 && position.y > 410 && position.y < 500)
+				return BUTTONSINK;
+
+
+		}
+		else
+		{
+			// mouseinput
+			if (Input.mouseX > 40 && Input.mouseX < 130 && Input.mouseY > 180 && Input.mouseY<260)
+				return BUTTONLEFT;
+
+			if (Input.mouseX > 580 && Input.mouseX < 670 && Input.mouseY > 180 && Input.mouseY<260)
+				return BUTTONRIGHT;
+
+			if (Input.mouseX > 170 && Input.mouseX < 250 && Input.mouseY > 180 && Input.mouseY< 260)
+				return BUTTONROTATELEFT;
+
+			if (Input.mouseX > 460 && Input.mouseX < 550 && Input.mouseY > 180 && Input.mouseY < 260)
+				return BUTTONROTATERIGHT;
+
+			if (Input.mouseX > 315 && Input.mouseX < 405 && Input.mouseY > 410 && Input.mouseY < 500)
+				return BUTTONSINK;
+
+		}
+
+		return BUTTONNONE;
 	}
 
 	private function spawntetro()
@@ -369,13 +436,20 @@ class Gamescene extends Scene
 
 	private function processinput()
 	{
-
+		var gesture1 = BUTTONNONE;
+		var mousegesture1 = BUTTONNONE;
 
 		if (Gesture.pressed(Gesture.TAP))
 		{
 			var gesture = Gesture.get(Gesture.TAP);
-			var valuecheck = checkgesture(gesture);
+			gesture1 = checkgesture(gesture);
 		}
+
+		if (Input.mousePressed)
+		{
+			gesture1 = checkgesture();
+		}
+
 
 
 		if (!music.playing)
@@ -392,17 +466,17 @@ class Gamescene extends Scene
 		}
 
 
-		if (Input.pressed ("right"))
+		if (Input.pressed (Key.RIGHT) || gesture1 == BUTTONRIGHT)
 		{
 			tetro.moveright();
 		}
 
-		if (Input.pressed("drop"))
+		if (Input.pressed(Key.SPACE) || gesture1 == BUTTONSINK)
 		{
 			droptetro();
 		}
 
-		if (Input.pressed(Key.LEFT))
+		if (Input.pressed(Key.LEFT) || gesture1 == BUTTONLEFT)
 		{
 			tetro.moveleft();
 		}
@@ -414,8 +488,16 @@ class Gamescene extends Scene
 		}
 
 
-		if (Input.pressed("rotate"))
+		if (Input.pressed(Key.UP) || gesture1 == BUTTONROTATELEFT)
 		{
+			tetro.rotate();
+		}
+
+		if (gesture1 == BUTTONROTATERIGHT)
+		{
+			// :D
+			tetro.rotate();
+			tetro.rotate();
 			tetro.rotate();
 		}
 
