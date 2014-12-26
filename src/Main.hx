@@ -8,7 +8,7 @@ class Main extends Engine
 
 	override public function init()
 	{
-//		HXP.console.enable();
+		HXP.console.enable();
 		HXP.scene = new Gamescene();
 	}
 
@@ -17,7 +17,7 @@ class Main extends Engine
 #if android
 	override public function new(width:Int=0, height:Int=0, frameRate:Float=60, fixed:Bool=false, ?renderMode:RenderMode) 
 	{
-	        super(800,500, frameRate, fixed, RenderMode.BUFFER);
+	        super(720,500, frameRate, fixed, RenderMode.BUFFER);
 	}
 #end
 

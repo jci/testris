@@ -4,6 +4,9 @@ import com.haxepunk.utils.Gesture;
 import com.haxepunk.utils.Key;
 import com.haxepunk.Sfx;
 import com.haxepunk.HXP;
+import com.haxepunk.Entity;
+import com.haxepunk.graphics.Image;
+import com.haxepunk.utils.Touch;
 
 enum GameLoop {
 	GAMEPAUSE;
@@ -42,6 +45,9 @@ class Gamescene extends Scene
 
 	public var twidth : Float;
 	public var theight : Float;
+
+	private var nexttetroent : Array<Entity>;
+	private var mygesture : GestureType;
 	
 	public override function new()
 	{
@@ -64,6 +70,11 @@ class Gamescene extends Scene
 		twidth = HXP.width/2;
 		theight = HXP.height/2;
 
+		nexttetroent = new Array<Entity>();
+
+		createnexttetro();
+
+
 
 	}
 
@@ -79,7 +90,9 @@ class Gamescene extends Scene
 		score = 0;
 		music.play();
 		// 
-		nextetro = new Tetromino();
+		nexttetro = new Tetromino();
+		rendernexttetro(nexttetro);
+
 
 
 	}
@@ -87,11 +100,30 @@ class Gamescene extends Scene
 	public override function update()
 	{
 
+
+		if (Input.multiTouchSupported) 	
+		{
+			Input.touchPoints(onTouch);
+		}
+		else
+		{
+			trace("not multitouch!");
+		}
+
+
+
+		super.update();
+
 		if (_gamestate == SPAWNTETRO)
 		{
-			tetro = nextetro;
+
+			trace("Next tetro is " + nexttetro.gettype());
+			tetro = nexttetro;
 			nexttetro = new Tetromino();
+			trace("Next tetro is " + nexttetro.gettype());
+			rendernexttetro(nexttetro);
 			_gamestate = PLAYLOOP;
+
 			return;
 
 		}
@@ -122,8 +154,6 @@ class Gamescene extends Scene
 				droptetro();
 			}
 
-
-
 			if (Input.pressed(Key.LEFT))
 			{
 				tetro.moveleft();
@@ -148,25 +178,28 @@ class Gamescene extends Scene
 #end
 			}
 
+
 			renderPlayfield(tetro);	
-		}
 
-			if (Input.pressed("pause"))
+
+			//
+			//experimental gesture type
+			mygesture = new GestureType();
+
+			if (Gesture.check(Gesture.MOVE))
 			{
-				if (_gamestate == PLAYLOOP)
-				{
-					_gamestate = GAMEPAUSE;
-				}
-
-				if (_gamestate == GAMEPAUSE)
-				{
-					_gamestate = PLAYLOOP;
-				}
-
+				trace("this is a gesture");
 			}
+
+
+
+
+
+		}
 
 		if (_gamestate == GAMEOVER)
 		{
+			music.stop();
 			if (Input.pressed("newtetro"))
 			{
 				begin();
@@ -174,7 +207,28 @@ class Gamescene extends Scene
 		}
 
 
-		super.update();
+		if (Input.pressed(Key.P))
+		{
+			if (_gamestate == PLAYLOOP)
+			{
+				_gamestate = GAMEPAUSE;
+				music.stop();
+				var newsfx = new Sfx("audio/test2.ogg");
+				newsfx.play();
+				return;
+			}
+
+			if (_gamestate == GAMEPAUSE)
+			{
+				_gamestate = PLAYLOOP;
+				music.resume();
+				return;
+			}
+
+		}
+
+
+
 
 	}
 
@@ -267,6 +321,124 @@ class Gamescene extends Scene
 			
 		}
 	}
+
+	private function createnexttetro()
+	{
+		//
+		for (i in 0...16)
+		{
+			var entity = new Entity();
+			var witd = new Image("graphics/blank.png");
+			entity.graphic = witd;
+			entity.x = 400 + i*witd.width;
+			entity.y = 10;
+			entity.visible = false;
+			entity.type = "blank";
+			nexttetroent.push(entity);
+		}
+		addList(nexttetroent);
+	}
+
+	private function rendernexttetro(tetro : Tetromino)
+	{
+		// first, let's get all to "blank"
+
+		for (i in 0...nexttetroent.length)
+		{
+			var entt = nexttetroent[i];
+			entt.type="blank";
+		}
+
+		// now the type
+
+		var howpaint = new Array<Array<Int>>();
+		switch(tetro.gettype())
+		{
+			case 0:
+				// square
+				howpaint=[[0],[0],[0],[0],
+						  [0],[1],[1],[0],
+						  [0],[1],[1],[0],
+						  [0],[0],[0],[0]];
+				
+			case 1:
+				howpaint=[[0],[1],[0],[0],
+						  [0],[1],[0],[0],
+						  [0],[1],[1],[0],
+						  [0],[0],[0],[0]];
+
+
+			case 2:
+				howpaint=[[0],[1],[0],[0],
+						  [0],[1],[0],[0],
+						  [0],[1],[1],[0],
+						  [0],[0],[0],[0]];
+
+
+			case 3:		
+				howpaint=[[0],[1],[0],[0],
+						  [0],[1],[1],[0],
+						  [0],[1],[0],[0],
+						  [0],[0],[0],[0]];
+
+			case 4:
+				howpaint=[[0],[1],[0],[0],
+						  [0],[1],[0],[0],
+						  [0],[1],[0],[0],
+						  [0],[1],[0],[0]];
+
+
+			case 5:
+				howpaint=[[0],[0],[1],[0],
+						  [0],[1],[1],[0],
+						  [0],[1],[0],[0],
+						  [0],[0],[0],[0]];
+
+
+			case 6:
+				howpaint=[[0],[0],[1],[0],
+						  [0],[0],[1],[0],
+						  [0],[1],[1],[0],
+						  [0],[0],[0],[0]];
+
+		}
+
+		trace(howpaint.length);
+
+	}
+
+	private function onTouch( touch : Touch)
+	{
+
+
+		var touched : Bool = false;
+		var touch1 : Float = 0;
+		
+
+			if(touch.pressed && !touched)
+			{
+				touch1 = touch.x;
+				touched = true;
+			}
+
+			trace(diference(touch1,touch.x));
+
+			if ( diference(touch1, touch.x) > (HXP.width / 12) && touched && touch1 > touch.x ) {
+				trace("left");
+				touched = false;
+			}
+			if ( diference(touch1, touch.x) > (HXP.width / 12) && touched && touch1 < touch.x ) {
+				trace("right");
+				touched = false;
+			}
+
+	}
+
+	private function diference(val1:Float, val2: Float)
+	{
+		return Math.abs(val1-val2);
+	}
+
 
 
 }
