@@ -8,9 +8,8 @@ class Main extends Engine
 
 	override public function init()
 	{
-//		HXP.console.enable();
-		HXP.scene = new IntroScene();
-//		HXP.scene = new Gamescene();
+		HXP.console.enable();
+		HXP.scene = new Introscene();
 	}
 
 	public static function main() { new Main(); }

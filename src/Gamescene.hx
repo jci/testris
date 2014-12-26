@@ -74,14 +74,10 @@ class Gamescene extends Scene
 	public override function new()
 	{
 		super();
-		Input.define("right", [Key.E, Key.RIGHT]);
-		Input.define("down", [Key.D, Key.DOWN]);
-		Input.define("left", [Key.W, Key.LEFT]);
-		Input.define("rotate", [Key.R,Key.UP]);
-		Input.define("newtetro", [Key.N]);
-		Input.define("quitgame", [Key.Q]);
-		Input.define("pause", [Key.P]);
-		Input.define("drop", [Key.SPACE]);
+	}
+
+	private function init()
+	{
 
 #if flash
 		music = new Sfx("audio/ozma-koro.mp3");
@@ -108,13 +104,6 @@ class Gamescene extends Scene
 		myoverlayentity.addGraphic(myimage);
 		this.add(myoverlayentity);
 
-	}
-
-	public override function begin()
-	{
-
-		//trace("" + HXP.width + " -- " + HXP.height);
-
 		_playfield = new Playfield();
 		_clocktick = 0;
 		_clocktickamount = 1;
@@ -128,11 +117,17 @@ class Gamescene extends Scene
 		rendernexttetro(nexttetro);
 		Gesture.enable();
 
+
+
+	}
+
+	public override function begin()
+	{
+		init();
 	}
 
 	public override function update()
 	{
-
 		super.update();
 
 

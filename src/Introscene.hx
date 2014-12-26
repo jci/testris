@@ -9,7 +9,7 @@ import com.haxepunk.graphics.Image;
 import com.haxepunk.utils.Touch;
 
 
-class IntroScene extends Scene
+class Introscene extends Scene
 {
 
 	// this is the holding place for the intro :D
@@ -18,7 +18,17 @@ class IntroScene extends Scene
 	{
 		super();
 
-		HXP.scene = new Gamescene();
+		init();
+	}
+
+	private function init()
+	{
+
+	}
+
+	public override function begin()
+	{
+//		HXP.scene = new Gamescene();
 	}
 
 
