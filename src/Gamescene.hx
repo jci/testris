@@ -111,7 +111,7 @@ class Gamescene extends Scene
 
 		_gamestate = SPAWNTETRO;
 		score = 0;
-		music.play();
+		music.loop();
 
 		nexttetro = new Tetromino();
 		rendernexttetro(nexttetro);
@@ -432,11 +432,6 @@ class Gamescene extends Scene
 			gesture1 = checkgesture();
 		}
 
-
-		if (!music.playing)
-		{
-			music.play();
-		}
 
 		_clocktick += _clocktickamount;
 
